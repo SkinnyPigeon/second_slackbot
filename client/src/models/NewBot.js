@@ -7,7 +7,6 @@ var NewBot = function Constructor(settings) {
     this.settings = settings;
     this.settings.name = this.settings.name || 'Uninvited Robot';
     this.user = null;
-    this.url = "https://wedding--photo-test.herokuapp.com/pictures";
     this.jokes = [ "I bought some shoes off of a drug dealer. I don't know what he laced them with but I've been trippin' all day."
 
         , "A mexican magician tells the audience he will disappear on the count of 3. He says, 'Uno, dos...' and then *poof* … he disappeared without a tres!"
@@ -26,10 +25,10 @@ var NewBot = function Constructor(settings) {
 
         , "What's the difference between a snow man and a snow woman? Snow balls!"
 
-        , "Did you hear about the guy who invented the knock knock joke?He won the 'no-bell' prize!"
+        , "Did you hear about the guy who invented the knock knock joke? He won the 'no-bell' prize!"
         , "Beep"
 
-        , "Bzzzzt" ]
+        , "Bzzzzt" ];
 };
 
 util.inherits(NewBot, Bot);
@@ -38,7 +37,6 @@ NewBot.prototype.run = function () {
     NewBot.super_.call( this, this.settings );
 
     this.on( 'start', this._onStart );
-    this.on( 'message', this._onMessage );
 };
 
 NewBot.prototype._onStart = function () {
@@ -55,7 +53,8 @@ NewBot.prototype._loadBotUser = function () {
 };
 
 NewBot.prototype._welcomeMessage = function () {
-    this.postMessageToChannel( this.channels[0].name, "Hello, I am a robot" );
+    console.log( this.channels );
+    this.postMessageToChannel( this.channels[2].name, "Hello, I am a robot" );
     this.haveSomeFun();
 };
 
@@ -64,7 +63,7 @@ NewBot.prototype.haveSomeFun = function() {
         var max = this.jokes.length;
         var min = 0;
         var i = Math.floor( Math.random() * ( max - min + 1 )) + min;
-        this.postMessageToChannel( this.channels[0].name, this.jokes[i] );
+        this.postMessageToChannel( this.channels[2].name, this.jokes[i] );
     }.bind( this ), 1200000)
 }
 
