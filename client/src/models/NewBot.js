@@ -6,7 +6,7 @@ var Bot = require('slackbots');
 
 var NewBot = function Constructor(settings) {
     this.settings = settings;
-    this.settings.name = this.settings.name || 'NewBot';
+    this.settings.name = this.settings.name || 'Uninvited Robot';
     this.user = null;
     this.url = "https://wedding--photo-test.herokuapp.com/pictures";
 };
@@ -27,56 +27,52 @@ NewBot.prototype._onStart = function () {
 
 NewBot.prototype._loadBotUser = function () {
     for( var i = 0; i < this.users.length; i++ ) {
-        if( this.users[i].name === 'wedding-test-bot' ) {
+        if( this.users[i].name === 'uninvited_robot' ) {
             this.id = this.users[i].id;
         }
     }
 };
 
 NewBot.prototype._welcomeMessage = function () {
-    this.postMessageToChannel( this.channels[1].name, "Hello, I am working" );
+    this.postMessageToChannel( this.channels[1].name, "Hello, I am a robot" );
+    this.haveSomeFun();
 };
 
-NewBot.prototype._onMessage = function( message ) {
-    if ( this._isChatMessage( message ) &&
-     this._isChannelConversation( message ) &&
-     !this._isFromNewBot( message )) {
-        this._handlePictures( message );
-    this._handleText( message );
-}
-};
+// NewBot.prototype._onMessage = function( message ) {
+//     if ( this._isChatMessage( message ) &&
+//      this._isChannelConversation( message ) &&
+//      !this._isFromNewBot( message )) {
+//         this._handleText( message );
+//     }
+// };
 
-NewBot.prototype._handleText = function( message ) {
-    // console.log( message );
-    if( message.text.charAt(0) !== '<' ) {
-        this.postMessageToChannel( this.channels[1].name, "Hello, I am replying" );
-    }
-};
+// NewBot.prototype._handleText = function( message ) {
+//     if( message.text.charAt(0) !== '<' ) {
+//         this.postMessageToChannel( this.channels[1].name, "Hello, I am replying" );
+//     }
+// };
 
-NewBot.prototype._handlePictures = function( message ) {
-    // console.log( "Hello" );
-    // console.log( message );
-    if( message.subtype === 'file_share' ) {
-        console.log( message.file.initial_comment.comment ); 
-        this._savePicture( message )
-    }
-};
+// NewBot.prototype._handlePictures = function( message ) {
+//     if( message.subtype === 'file_share' ) {
+//         this._savePicture( message )
+//     }
+// };
 
-NewBot.prototype._savePicture = function( message ) {
-    this.postMessageToChannel( this.channels[1].name, "Hello, I am processing a picture" );
-    var request = new XMLHttpRequest()
-    request.open( 'POST', this.url )
-    request.setRequestHeader("Content-Type", "application/json")
-    request.onload = () => {
-        console.log( this.url )
-    }
-    var data = {
-        picture: {
-          url: message.file.url_private
-      }
-    }
-    request.send( JSON.stringify( data ));
-};
+// NewBot.prototype._savePicture = function( message ) {
+//     this.postMessageToChannel( this.channels[1].name, "Hello, I am processing a picture" );
+//     var request = new XMLHttpRequest()
+//     request.open( 'POST', this.url )
+//     request.setRequestHeader("Content-Type", "application/json")
+//     request.onload = () => {
+//         console.log( this.url )
+//     }
+//     var data = {
+//         picture: {
+//           url: message.file.url_private
+//       }
+//     }
+//     request.send( JSON.stringify( data ));
+// };
 
 NewBot.prototype._isChatMessage = function ( message ) {
     return message.type === 'message' && Boolean( message.text );
