@@ -1,6 +1,5 @@
 'use strict';
 
-var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 var util = require('util');
 var Bot = require('slackbots');
 
@@ -60,8 +59,10 @@ NewBot.prototype._welcomeMessage = function () {
     this.haveSomeFun();
 };
 
-Newbot.prototype.haveSomeFun = function() {
+NewBot.prototype.haveSomeFun = function() {
     setInterval( function() {
+        var max = this.jokes.length;
+        var min = 0;
         var i = Math.floor( Math.random() * ( max - min + 1 )) + min;
         this.postMessageToChannel( this.channels[0].name, this.jokes[i] );
     }.bind( this ), 1200000)
