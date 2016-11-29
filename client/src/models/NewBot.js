@@ -7,7 +7,7 @@ var NewBot = function Constructor(settings) {
     this.settings = settings;
     this.settings.name = this.settings.name || 'Uninvited Robot';
     this.user = null;
-    this.no = 0;
+    this.messageCounter = 0;
     this.jokes = [ "I bought some shoes off of a drug dealer. I don't know what he laced them with but I've been trippin' all day."
 
     , "A mexican magician tells the audience he will disappear on the count of 3. He says, 'Uno, dos...' and then *poof* … he disappeared without a tres!"
@@ -79,12 +79,12 @@ NewBot.prototype._welcomeMessage = function () {
 NewBot.prototype.haveSomeFun = function() {
     setInterval( function() {
         console.log( this.no );
-        if( this.no >= 1 ) {
-            var max = this.jokes.length;
+        if( this.messageCounter >= 10 ) {
+            var max = this.jokes.length - 1;
             var min = 0;
             var i = Math.floor( Math.random() * ( max - min + 1 )) + min;
             this.postMessageToChannel( this.channels[2].name, this.jokes[i] );
-            this.no = 0;
+            this.messageCounter = 0;
         }
     }.bind( this ), 5000 )
 };
@@ -94,9 +94,51 @@ NewBot.prototype._onMessage = function( message ) {
      this._isChannelConversation( message ) &&
      !this._isFromNewBot( message )) {
         console.log( message );
-        this.no += 1;
+        this.messageCounter += 1;
+        this.playRockPaperScissors( message );
     }
 };
+
+NewBot.prototype.playRockPaperScissors = function( message ) {
+    var handShapes = [ "Rock", "Paper", "Scissors" ];
+    var max = handShapes.length - 1;
+    var min = 0;
+    var i = Math.floor( Math.random() * ( max - min + 1 )) + min;
+    var hand = handShapes[i];
+
+    if( message === "rock" || message === "Rock" ) {
+
+        if( hand === "Paper" ) {
+            this.postMessageToChannel( this.channels[2].name, "Paper, I win" );
+        }
+
+        if( hand === "Scissors" ) {
+            this.postMessageToChannel( this.channels[2].name, "Scissors, you win" );
+        }
+    }
+
+    if( message === "paper" || message === "Paper" ) {
+
+        if( hand === "Scissors" ) {
+            this.postMessageToChannel( this.channels[2].name, "Scissors, I win" );
+        }
+
+        if( hand === "Rock" ) {
+            this.postMessageToChannel( this.channels[2].name, "Rock, you win" );
+        }
+    }
+
+    if( message === "scissors" || message === "Scissors" ) {
+
+        if( hand === "Rock" ) {
+            this.postMessageToChannel( this.channels[2].name, "Rock, I win" );
+        }
+
+        if( hand === "Paper" ) {
+            this.postMessageToChannel( this.channels[2].name, "Paper, you win" );
+        }
+    }
+}
 
 NewBot.prototype._isChatMessage = function ( message ) {
     return message.type === 'message' && Boolean( message.text );
